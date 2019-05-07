@@ -1,0 +1,16 @@
+실행 순서
+python 실행 - web 접속 - 제어
+
+WebSocket
+1. 길이제한
+
+
+Web
+1. 빈 문자 보내기 막기
+
+
+보안
+1. sql injection
+2. ow - top 10
+
+
