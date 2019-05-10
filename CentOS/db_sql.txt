@@ -1,0 +1,30 @@
+mysql -u root -p123456
+
+create database user_db;
+
+show databases;
+
+create user 'user'@'localhost' identified by '123456';
+
+grant all privileges on user_db.* to 'user'@'localhost';
+
+exit
+
+mysql -u user -p123456
+
+show databases;
+
+use user_db;
+
+create table user(
+	user_id varchar(50) primary key,
+	user_pw varchar(100) not null
+);
+
+insert into user values ('test', '123456');
+
+select * from user;
+
+exit
+
+-------------------------------------------------------------------------------------------------------------------
