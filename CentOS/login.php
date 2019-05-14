@@ -6,4 +6,5 @@
         <p>PW : <input type="password" id="user_pw" name="user_pw" value=""></p>
         <input type="submit" name="" value="login">
     </div>
+        <a href="register.php">register</a>
 </form>

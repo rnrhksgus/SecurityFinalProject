@@ -14,6 +14,11 @@
         <input type="text" class="form-control" id="msg" onkeypress="if( event.keyCode==13 ){sendMsg();}">
         <input type="button" class="btn btn-default" onclick="sendMsg()" value="전송">
     </div>
+    <button onclick="sendGoMsg()">go</button>
+    <button onclick="sendBackMsg()">back</button>
+    <button onclick="sendLeftMsg()">left</button>
+    <button onclick="sendRightMsg()">right</button>
+
 </div>
  
 <script type="text/javascript">
@@ -22,7 +27,7 @@
         if (ws != 0 && ws.readyState != 1) return;
         if ("WebSocket" in window) {
             // alert("WebSocket is supported by your Browser!");
-            ws = new WebSocket("ws://192.168.140.53:8765");
+            ws = new WebSocket("ws://192.168.40.84:8765");
             ws.onopen = function() {
                 console.log("connected");
             };
@@ -43,6 +48,18 @@
     function sendMsg() {
         ws.send(document.getElementById("msg").value);
         document.getElementById("msg").value = '';
+    }
+    function sendGoMsg(){
+        ws.send('go');
+    }
+    function sendBackMsg(){
+        ws.send('back');
+    }
+    function sendLeftMsg(){
+        ws.send('left');
+    }
+    function sendRightMsg(){
+        ws.send('right');
     }
     function ChatAreaResize() {
         var div2 = document.getElementById('chatArea');
