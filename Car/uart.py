@@ -5,8 +5,8 @@ class Uart :
     ser = 0
 
     def __init__(self) :
-        #self.ser = serial.Serial(port='/dev/ttyS0', baudrate=115200)
-        self.ser = serial.Serial(baudrate=115200)
+        self.ser = serial.Serial(port='/dev/ttyS0', baudrate=115200)
+        #self.ser = serial.Serial(baudrate=115200)
             
     def uart_receive(self) :
         if (self.ser.in_waiting > 0) :

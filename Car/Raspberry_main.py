@@ -5,7 +5,9 @@ import re
 import hashlib
 import base64
 import threading
+import struct
 
+from uart import Uart
 
 def send(client, msg):
     try:
@@ -22,6 +24,10 @@ def send(client, msg):
             frame.append(len(data))
         client.send(frame + data)
         app.addListItem('list', data.decode())
+        if(data.decode()=='go'):
+            uart.uart_transmit('FRONT LAMP ON')
+        elif (data.decode()=='back'):
+            uart.uart_transmit('FRONT LAMP OFF')
     except Exception as e:
         print("send ERROR : " + str(e))
 
@@ -114,15 +120,79 @@ def button_press(name):
     if name == 'go':
         print(name, 'Click')
         app.addListItem('list', 'go')
+        uart.uart_transmit('FRONT LAMP ON')
     elif name == 'back':
         print(name, 'Click')
         app.addListItem('list', 'back')
+        uart.uart_transmit('FRONT LAMP OFF')
     elif name == 'right':
         print(name, 'Click')
         app.addListItem('list', 'right')
+        uart.uart_transmit('FRONT SIDE LAMP RIGHT ON')
     elif name == 'left':
         print(name, 'Click')
         app.addListItem('list', 'left')
+        uart.uart_transmit('FRONT SIDE LAMP LEFT ON')
+
+uart_command = {
+    '0' : { #ultra_sonic
+        '0' : 'front_left_sonic',
+        '1' : 'front_center_sonic',
+        '2' : 'front_right_sonic',
+        '3' : 'back_left_sonic',
+        '4' : 'back_right_sonic'
+    },
+
+    '1' : { #photo_transistor
+        '0' : 'front_left_photo',
+        '1' : 'front_right_photo'
+    },
+
+    '2' : { #encoder
+        '0' : 'middle_front_left_encoder',
+        '1' : 'middle_front_right_encoder',
+        '2' : 'middle_back_left_encoder',
+        '3' : 'middle_back_right_encoder'
+    },
+
+    '3' : { #mpu6050
+        '0' : 'main_mpu6050_ax',
+        '1' : 'main_mpu6050_ay',
+        '2' : 'main_mpu6050_az',
+        '3' : 'main_mpu6050_gx',
+        '4' : 'main_mpu6050_gy',
+        '5' : 'main_mpu6050_gz'
+    },
+
+    '4' : { #battery
+        '0' : 'battery'
+    }
+}
+
+def uart_receive_thread():
+    while True:
+        buf = []
+        loop = 0
+
+        # wait until STX
+        while uart.uart_receive() != '\x02':
+            time.sleep(0.001)
+
+        # receive data until ETX
+        while True:
+            data = uart.uart_receive()
+
+            if (data != None):
+
+                if (data == '\x03'):
+                    break
+
+                buf.append(data)
+                loop += 1
+                time.sleep(0.001)
+
+        target = uart_command[buf[0]][buf[1]]
+        app.setLabel(target + "_label", buf[2:])
 
 
 if __name__ == "__main__":
@@ -132,7 +202,7 @@ if __name__ == "__main__":
 
         # LEFT_1
         app.startFrame('LEFT_1', row=0, column=0)
-        app.addImage('picture', 'car.png')
+        #app.addImage('picture', './car.png')
         app.stopFrame()
 
         #LEFT_2
@@ -148,6 +218,10 @@ if __name__ == "__main__":
         app.setFont(10)
         app.addListBox('list')
         app.stopFrame()
+
+        uart = Uart()
+        uart_receive = threading.Thread(target=uart_receive_thread)
+        uart_receive.start()
 
         web_server = threading.Thread(target=thread_web_server)
         web_server.start()
