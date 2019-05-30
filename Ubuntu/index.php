@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.2/jquery.mobile-1.1.2.min.css" />
         <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.1.2/jquery.mobile-1.1.2.min.js"></script>
@@ -18,8 +19,8 @@
     $user_id = $_SESSION['user_id'];
     $user_name = $_SESSION['user_name'];
     echo "<p>Hello. $user_name($user_id)<a href='logout.php'rel='external'>logout</a></p>";
-    echo "<div style='display:inline-block; width:640px; height:480px'><img src='http://192.168.140.55:8080/stream/video.mjpeg'></div>";
-    echo "<div id='chatArea' style='display:inline-block; border:1px solid black; overflow-y: auto; width:100px; height: 480px;'></div>";
+    echo "<div style='display:inline-block; width:100%; height:auto;'><img src='http://192.168.140.55:8080/stream/video.mjpeg'></div>";
+    echo "<div id='chatArea' style='display:inline-block; overflow-y: auto; width:100%; height: 100px;'></div>";
     echo "<button onclick='sendGoMsg()'>go</button>";
     echo "<button onclick='sendBackMsg()'>back</button>";
     echo "<button onclick='sendLeftMsg()'>left</button>";
@@ -92,7 +93,8 @@
             count.value = count.value - 5;
             if (count.value < 0)
                 count.value = 0;
-            sendScaleMsg();
+	    else
+        	sendScaleMsg();
         }, 1000);
     });
 
@@ -128,3 +130,4 @@
         }
     };
 </script>
+

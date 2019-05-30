@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
     if(empty($_POST['user_id']) || empty($_POST['user_pw'])){
         echo "<meta http-equiv='refresh' content='0;url=login.php'>";
