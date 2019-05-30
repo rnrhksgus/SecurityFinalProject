@@ -28,21 +28,31 @@ select * from user;
 exit
 
 -------------------------------------------------------------------------------------------------------------------
-20190515 Ãß°¡ »çÇ×
+20190515 ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-drop table user;
-drop table car;
 drop tables car_auth;
+drop table car;
+drop table user;
 
 create table user(
 	user_id varchar(50) primary key,
 	user_pw varchar(100) not null,
 	user_name varchar(50) not null,
-	user_email varchar(100) not null
+	user_email varchar(100) not null,
 )ENGINE = InnoDB;
 
-insert into user values ('test', '123456', 'test1', 'test@test.com');
-insert into user values ('test1', '123456', 'test2', 'test1@test.com');
+drop table user;
+
+create table user(
+	user_id varchar(50) primary key,
+	user_pw varchar(100) not null,
+	user_name varchar(50) not null,
+	user_email varchar(100) not null,
+	user_login_fail int default 0
+)ENGINE = InnoDB;
+
+insert into user (user_id, user_pw, user_name, user_email) values ('test', '123456', 'test1', 'test@test.com');
+insert into user (user_id, user_pw, user_name, user_email) values ('test1', '123456', 'test2', 'test1@test.com');
 
 select * from user;
 
@@ -67,7 +77,7 @@ create table car(
 insert into car (car_ip, car_name, user_id) values ('127.0.0.1', 'car_name', 'test');
 insert into car (car_ip, car_name, user_id) values ('127.0.0.1', 'car_name', 'test1');
 insert into car (car_ip, car_name, user_id) values ('192.168.40.4', 'car_name', 'asdf');
-insert into car (car_ip, car_name, user_id) values ('192.168.40.4', 'car_name', 'test1'); 
+insert into car (car_ip, car_name, user_id) values ('192.168.40.4', 'car_name', 'test1');
 
 select * from user;
 
@@ -97,5 +107,3 @@ select * from car;
 
 
 -------------------------------------------------------------------------------------------------------------------
-
-

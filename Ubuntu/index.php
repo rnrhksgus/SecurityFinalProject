@@ -1,14 +1,42 @@
 <!DOCTYPE html>
-<meta charset="utf-8" />
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.2/jquery.mobile-1.1.2.min.css" />
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.1.2/jquery.mobile-1.1.2.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    </head>
+</html>
+<?php
+    session_start();
+    if(!isset($_SESSION['user_id'])) {
+        echo "<meta http-equiv='refresh' content='0;url=login.php'>";
+        exit;
+    }
+    $user_id = $_SESSION['user_id'];
+    $user_name = $_SESSION['user_name'];
+    echo "<p>Hello. $user_name($user_id)<a href='logout.php'rel='external'>logout</a></p>";
+    echo "<div style='display:inline-block; width:640px; height:480px'><img src='http://192.168.140.55:8080/stream/video.mjpeg'></div>";
+    echo "<div id='chatArea' style='display:inline-block; border:1px solid black; overflow-y: auto; width:100px; height: 480px;'></div>";
+    echo "<button onclick='sendGoMsg()'>go</button>";
+    echo "<button onclick='sendBackMsg()'>back</button>";
+    echo "<button onclick='sendLeftMsg()'>left</button>";
+    echo "<button onclick='sendRightMsg()'>right</button>";
+    echo "<button onclick='sendMoveMsg()'>move</button>";
+    echo "<button onclick='sendStopMsg()'>stop</button>";
+    echo "<input id='count' type='number' value='0' />";
+    echo "<button id='plus' onmousedown='sendScaleMsg()'>plus</button>";
+    echo "<button id='minus' onmousedown='sendScaleMsg()'>minus</button>";
+?>
 <script type="text/javascript">
     var ws = 0
     document.addEventListener("DOMContentLoaded", function(){
         if (ws != 0 && ws.readyState != 1) return;
         if ("WebSocket" in window) {
             // alert("WebSocket is supported by your Browser!");
-            ws = new WebSocket("ws://192.168.40.20:8765");
+            ws = new WebSocket("ws://192.168.140.55:9999");
             ws.onopen = function() {
                 console.log("connected");
             };
@@ -42,22 +70,61 @@
     function sendRightMsg(){
         ws.send('right');
     }
-</script>
-<?php
-    session_start();
-    if(!isset($_SESSION['user_id'])) {
-        echo "<meta http-equiv='refresh' content='0;url=login.php'>";
-        exit;
+    function sendStopMsg(){
+        ws.send('stop');
     }
-    $user_id = $_SESSION['user_id'];
-    $user_name = $_SESSION['user_name'];
-    echo "<p>안녕하세요. $user_name($user_id)님</p>";
-    echo "<div style='border:1px solid black; display:inline-block; width:300px; height:300px'><img src='192.168.140.69:8081'></div>";
-    echo "<p><a href='logout.php'rel='external'>로그아웃</a></p>";
-    echo "<button onclick='sendGoMsg()'>go</button>";
-    echo "<button onclick='sendBackMsg()'>back</button>";
-    echo "<button onclick='sendLeftMsg()'>left</button>";
-    echo "<button onclick='sendRightMsg()'>right</button>";
-?>
+    function sendMoveMsg(){
+        ws.send('move');
+    }
+    function sendScaleMsg(){
+        ws.send(count.value);
+    }
 
+    var plusEle = document.querySelector('#plus');
+    var minusEle = document.querySelector('#minus');
+    var isPressed = false;
 
+    var playAlert = null;
+
+    plusEle.addEventListener('mouseup', function(event) {
+        isPressed = false;
+        playAlert = setInterval(function() {
+            count.value = count.value - 5;
+            if (count.value < 0)
+                count.value = 0;
+            sendScaleMsg();
+        }, 1000);
+    });
+
+    plusEle.addEventListener('mousedown', function(event) {
+        clearInterval(playAlert);
+        isPressed = true;
+        doInterval('10');
+    });
+
+    minusEle.addEventListener('mouseup', function(event) {
+        isPressed = false;
+    });
+
+    minusEle.addEventListener('mousedown', function(event) {
+        isPressed = true;
+        doInterval('-10');
+    });
+    function doInterval(action) {
+        if (isPressed) {
+            var countEle = document.querySelector('#count');
+            count.value = parseInt(count.value) + parseInt(action);
+
+            setTimeout(function() {
+                doInterval(action);
+                if(count.value>100){
+                    count.value = 100
+                }
+                if(count.value<0){
+                    count.value = 0
+                }
+                sendScaleMsg();
+            }, 200);
+        }
+    };
+</script>
