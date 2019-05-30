@@ -147,14 +147,12 @@
                     hiddenErrorMsg(eMsg);
                 }
                 var isemail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
                 if (!isemail.test(email)) {
                     showErrorMsg(eMsg, "올바른 이메일을 입력해 주세요.");
+                    return false;
                 } else {
                     showSuccessMsg(eMsg, "올바른 이메일을 입력하였습니다.");
                 }
-                return false;
-
                 flag_email = true;
                 return true;
             }
