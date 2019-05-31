@@ -63,12 +63,14 @@ create table car_auth(
 
 insert into car_auth values ('127.0.0.1', 'pin_num1');
 insert into car_auth values ('192.168.40.4', 'pin_num2');
+insert into car_auth values ('127.0.0.2', 'pin_num3');
+insert into car_auth values ('127.0.0.3', 'pin_num4');
 
 select * from car_auth;
 
 create table car(
 	car_ip varchar(50) primary key,
-	car_name varchar(50) not null,
+	car_name varchar(50),
 	user_id varchar(50),
 	foreign key (car_ip) references car_auth (car_ip) on delete cascade on update cascade,
 	foreign key (user_id) references user (user_id) on delete cascade on update cascade
