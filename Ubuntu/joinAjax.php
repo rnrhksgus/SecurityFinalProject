@@ -46,6 +46,62 @@
             echo "N";
         }
         mysqli_free_result($result);
+    } else if($var == "board_list"){
+        $page = $_GET['page'];
+
+        $sql = "select count(*) as cnt from board";
+        $result = mysqli_query($con, $sql);
+        $total_cnt = mysqli_fetch_object($result)->cnt;
+
+        $sql_page = ($page - 1) * 10;
+        $sql = "select * from board order by board_num desc LIMIT $sql_page, 10;";
+        $result = mysqli_query($con, $sql);
+        $output = "
+            <table>
+                <thead>
+                    <tr>
+                        <th width=50%>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+        ";
+        while ($row = mysqli_fetch_object($result)){
+            $date = strtotime($row->board_date);
+            $date = date('Y-m-d', $date);
+            $output .= "
+                <tr>
+                    <td>$row->board_title</td>
+                    <td>$row->board_user_id</td>
+                    <td>$date</td>
+                </tr>
+            ";
+        }
+        $output .= "
+                </tbody>
+            </table>
+            <br>
+            <div>
+        ";
+
+        for ($i = 1; $i <= ($total_cnt/10) +1 ; $i++) {
+            if($page == $i){
+                $output .= "
+                    <span> $i <span>
+                ";
+            } else {
+                $output .= "
+                    <a href='board.php?page=$i' class='a_bottom' rel='external'> $i </a>
+                ";
+            }
+        }
+        $output .= "
+            </div>
+            <br>
+            ";
+        echo "$output";
+        mysqli_free_result($result);
     }
     mysqli_close($con);
 ?>
