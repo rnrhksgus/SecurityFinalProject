@@ -55,22 +55,22 @@
                     if(flag_id && flag_pw && flag_pwc && flag_name && flag_email && flag_car_ip && flag_car_name && flag_car_pin){
                         $("#form_join").submit();
                     } else {
-                        if(flag_id){
-
-                        } else if (flag_pw){
-
-                        } else if (flag_pwc){
-
-                        } else if (flag_name){
-
-                        } else if (flag_email){
-
-                        } else if (flag_car_ip){
-
-                        } else if (flag_car_name){
-
-                        } else if (flag_car_pin){
-
+                        if(!flag_id){
+                            $("#user_id").focus();
+                        } else if (!flag_pw){
+                            $("#user_pw").focus();
+                        } else if (!flag_pwc){
+                            $("#user_pwc").focus();
+                        } else if (!flag_name){
+                            $("#user_name").focus();
+                        } else if (!flag_email){
+                            $("#user_email").focus();
+                        } else if (!flag_car_ip){
+                            $("#car_ip").focus();
+                        } else if (!flag_car_name){
+                            $("#car_name").focus();
+                        } else if (!flag_car_pin){
+                            $("#car_pin").focus();
                         }
                         return false;
                     }
@@ -321,6 +321,7 @@
                 <p class="error_messge" id="error_messge_car_pin">필수 정보 입니다.</p>
                 <button type="button" name="button" id="btn_join">가입하기</button>
             </form>
+            <button onclick="location.href='login.php'">로그인 페이지</button>
         </div>
     </body>
 </html>

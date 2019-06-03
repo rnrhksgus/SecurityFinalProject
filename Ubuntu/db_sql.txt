@@ -30,7 +30,8 @@ exit
 -------------------------------------------------------------------------------------------------------------------
 20190515 �߰� ����
 
-drop tables car_auth;
+drop table board;
+drop table car_auth;
 drop table car;
 drop table user;
 
@@ -51,6 +52,7 @@ create table user(
 	user_login_fail int default 0
 )ENGINE = InnoDB;
 
+insert into user (user_id, user_pw, user_name, user_email) values ('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 'admin@admin.com');
 insert into user (user_id, user_pw, user_name, user_email) values ('test', '123456', 'test1', 'test@test.com');
 insert into user (user_id, user_pw, user_name, user_email) values ('test1', '123456', 'test2', 'test1@test.com');
 
@@ -80,6 +82,28 @@ insert into car (car_ip, car_name, user_id) values ('127.0.0.1', 'car_name', 'te
 insert into car (car_ip, car_name, user_id) values ('127.0.0.1', 'car_name', 'test1');
 insert into car (car_ip, car_name, user_id) values ('192.168.40.4', 'car_name', 'asdf');
 insert into car (car_ip, car_name, user_id) values ('192.168.40.4', 'car_name', 'test1');
+
+select * from car;
+
+create table board(
+	board_num int primary key,
+	board_title varchar(50) not null,
+	board_pw varchar(50),
+	board_user_id varchar(50),
+	board_date datetime,
+	board_content varchar(1000),
+	foreign key (board_user_id) references user (user_id) on delete cascade on update cascade
+) ENGINE = InnoDB;
+
+insert into board values (1, 'board_title', 'board_pw', 'test', now(), 'board_content');
+
+create table sequence(
+	sequence_name varchar(10) primary key,
+	sequence_value int default 0
+) ENGINE = InnoDB;
+
+insert into sequence (sequence_name, sequence_value) values ('board', 2);
+
 
 select * from user;
 
