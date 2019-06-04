@@ -1,0 +1,146 @@
+mysql -u root -p123456
+
+create database user_db;
+
+show databases;
+
+create user 'user'@'localhost' identified by '123456';
+
+grant all privileges on user_db.* to 'user'@'localhost';
+
+exit
+
+mysql -u user -p123456
+
+show databases;
+
+use user_db;
+
+create table user(
+	user_id varchar(50) primary key,
+	user_pw varchar(100) not null
+);
+
+insert into user values ('test', '123456');
+
+select * from user;
+
+exit
+
+-------------------------------------------------------------------------------------------------------------------
+20190515 �߰� ����
+
+drop table board;
+drop table car_auth;
+drop table car;
+drop table user;
+
+create table user(
+	user_id varchar(50) primary key,
+	user_pw varchar(100) not null,
+	user_name varchar(50) not null,
+	user_email varchar(100) not null,
+)ENGINE = InnoDB;
+
+drop table user;
+
+create table user(
+	user_id varchar(50) primary key,
+	user_pw varchar(100) not null,
+	user_name varchar(50) not null,
+	user_email varchar(100) not null,
+	user_login_fail int default 0
+)ENGINE = InnoDB;
+
+insert into user (user_id, user_pw, user_name, user_email) values ('admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 'admin@admin.com');
+insert into user (user_id, user_pw, user_name, user_email) values ('test', '123456', 'test1', 'test@test.com');
+insert into user (user_id, user_pw, user_name, user_email) values ('test1', '123456', 'test2', 'test1@test.com');
+
+select * from user;
+
+create table car_auth(
+	car_ip varchar(50) primary key,
+	car_pin varchar(100) not null
+)ENGINE = InnoDB;
+
+insert into car_auth values ('127.0.0.1', 'pin_num1');
+insert into car_auth values ('192.168.40.4', 'pin_num2');
+insert into car_auth values ('127.0.0.2', 'pin_num3');
+insert into car_auth values ('127.0.0.3', 'pin_num4');
+
+select * from car_auth;
+
+create table car(
+	car_ip varchar(50) primary key,
+	car_name varchar(50),
+	user_id varchar(50),
+	foreign key (car_ip) references car_auth (car_ip) on delete cascade on update cascade,
+	foreign key (user_id) references user (user_id) on delete cascade on update cascade
+) ENGINE = InnoDB;
+
+insert into car (car_ip, car_name, user_id) values ('127.0.0.1', 'car_name', 'test');
+insert into car (car_ip, car_name, user_id) values ('127.0.0.1', 'car_name', 'test1');
+insert into car (car_ip, car_name, user_id) values ('192.168.40.4', 'car_name', 'asdf');
+insert into car (car_ip, car_name, user_id) values ('192.168.40.4', 'car_name', 'test1');
+
+select * from car;
+
+create table board(
+	board_num int primary key,
+	board_title varchar(50) not null,
+	board_pw varchar(50),
+	board_user_id varchar(50),
+	board_date datetime,
+	board_content varchar(1000),
+	foreign key (board_user_id) references user (user_id) on delete cascade on update cascade
+) ENGINE = InnoDB;
+
+insert into board values (1, 'board_title', 'board_pw', 'test', now(), 'board_content');
+
+create table sequence(
+	sequence_name varchar(10) primary key,
+	sequence_value int default 0
+) ENGINE = InnoDB;
+
+insert into sequence (sequence_name, sequence_value) values ('board', 2);
+
+drop table server_log;
+
+create table server_log(
+	PHP_SELF varchar(50),
+	REMOTE_ADDR varchar(20),
+	MAC_ADDR varchar(20),
+	REMOTE_PORT varchar(10),
+	SCRIPT_NAME varchar(30),
+	REQUEST_URI varchar(200),
+	TIME datetime
+) ENGINE = InnoDB;
+
+select * from user;
+
+select * from car_auth;
+
+select * from car;
+
+delete from user where user_id = 'test1';
+
+select * from user;
+
+select * from car_auth;
+
+select * from car;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------

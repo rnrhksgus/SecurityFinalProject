@@ -32,3 +32,4 @@
     mysqli_close($con);
 ?>
 <meta http-equiv='refresh' content='0;url=board.php'>
+

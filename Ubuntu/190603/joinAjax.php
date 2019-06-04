@@ -72,7 +72,7 @@
             $date = date('Y-m-d', $date);
             $output .= "
                 <tr>
-                    <td>$row->board_title</td>
+                    <td><a href='board_view.php?board_num=$row->board_num' rel='external'>$row->board_title</a></td>
                     <td>$row->board_user_id</td>
                     <td>$date</td>
                 </tr>
@@ -103,5 +103,18 @@
         echo "$output";
         mysqli_free_result($result);
     }
+    else if($var == "board_view"){
+       $board_num = $_GET['board_num'];
+
+       $sql = "select * from board where board_num = $board_num";
+       $result = mysqli_query($con, $sql);
+       $row = mysqli_fetch_object($result);
+       $output['board_title'] = $row->board_title;
+       $output['board_user_id'] = $row->board_user_id;
+       $output["board_content"] = $row->board_content;
+       echo json_encode($output, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+       mysqli_free_result($result);
+   }
     mysqli_close($con);
 ?>
+
