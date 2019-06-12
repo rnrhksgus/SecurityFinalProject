@@ -178,7 +178,24 @@
        $mac_addr = stripslashes($mac_addr);
        $mac_addr = mysqli_real_escape_string($con, $mac_addr);
 
-       echo "차단 완료";
+       if($ip_addr != '' && $mac_addr != ''){
+            $sql = "insert into block (ip_addr, mac_addr) values ('$ip_addr', '$mac_addr')";
+            exec("sudo iptables -A INPUT -s ".$ip_addr." -j DROP");
+            exec("sudo iptables -A INPUT -m mac --mac-source ".$mac_addr." -j DROP");
+            $result = mysqli_query($con, $sql);
+            echo "차단 완료";
+       } else if ($ip_addr != ''){
+           $sql = "insert into block (mac_addr) values ('$mac_addr')";
+           exec("sudo iptables -A INPUT -m mac --mac-source ".$mac_addr." -j DROP");
+           $result = mysqli_query($con, $sql);
+       } else if ($ip_addr != ''){
+           $sql = "insert into block (ip_addr) values ('$ip_addr')";
+           exec("sudo iptables -A INPUT -s ".$ip_addr." -j DROP");
+           $result = mysqli_query($con, $sql);
+       } else {
+           echo "오류";
+       }
+
    } else if ($var == "admin_menu_unblock"){
        $ip_addr = $_GET['ip_addr'];
        $ip_addr = stripslashes($ip_addr);

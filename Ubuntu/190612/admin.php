@@ -300,7 +300,7 @@
                             url: "/adminAjax.php?m=admin_menu_block&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
                             success : function(data){
                                 alert(data);
-                                get_server_list();
+                                get_block_list();
                             }
                         });
                     },

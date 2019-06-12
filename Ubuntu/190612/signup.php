@@ -125,7 +125,7 @@
                 }
                 $.ajax({
                     type:"GET",
-                    url: "/joinAjax.php?m=checkId&user_id=" + id,
+                    url: "/userAjax.php?m=checkId&user_id=" + id,
                     success : function(data){
                         var result = data.replace(/\n/g, "")
                         if (result == "Y"){
@@ -242,7 +242,7 @@
                 } else {
                     $.ajax({
                         type:"GET",
-                        url: "/joinAjax.php?m=checkCarIP&car_ip=" + car_ip,
+                        url: "/userAjax.php?m=checkCarIP&car_ip=" + car_ip,
                         success : function(data){
                             var result = data.replace(/\n/g, "")
                             if (result == "Y"){
@@ -285,7 +285,7 @@
                 if (flag_car_ip){
                     $.ajax({
                         type:"GET",
-                        url: "/joinAjax.php?m=checkCarPin&car_ip=" + car_ip + "&car_pin=" + car_pin,
+                        url: "/userAjax.php?m=checkCarPin&car_ip=" + car_ip + "&car_pin=" + car_pin,
                         success : function(data){
                             var result = data.replace(/\n/g, "")
                             if (result == "Y"){

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -81,7 +81,7 @@
                 }
                 $.ajax({
                     type:"GET",
-                    url: "/joinAjax.php?m=board_list&page=" + page,
+                    url: "/userAjax.php?m=board_list&page=" + page,
                     success : function(data){
                         $("#result").html(data);
                     }
@@ -93,6 +93,25 @@
                     results = regex.exec(location.search);
                 return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
             }
+
+            $(document).on("click", ".check_pw", function(){
+                var tr = $(this).parent();
+                var td = tr.children();
+                var num = td.eq(0).text();
+                var name_value = prompt("비밀번호는?", "");
+                if(name_value){
+                    alert(name_value);
+                } else {
+                    return false;
+                }
+                $.ajax({
+                    type:"GET",
+                    url: "/userAjax.php?m=board_pw_check&board_num=" + num + "&board_pw=" + name_value,
+                    success : function(data){
+                        alert(data);
+                    }
+                });
+            });
         </script>
     </head>
     <body>
@@ -106,4 +125,3 @@
         </div>
     </body>
 </html>
-

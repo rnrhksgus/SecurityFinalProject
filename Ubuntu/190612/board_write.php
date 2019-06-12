@@ -108,7 +108,7 @@
                 }
                 $.ajax({
                     type:"GET",
-                    url: "/joinAjax.php?m=checkId&user_id=" + board_user_id,
+                    url: "/userAjax.php?m=checkId&user_id=" + board_user_id,
                     success : function(data){
                         var result = data.replace(/\n/g, "")
                         if (result == "N"){
@@ -189,4 +189,3 @@
         </div>
     </body>
 </html>
-

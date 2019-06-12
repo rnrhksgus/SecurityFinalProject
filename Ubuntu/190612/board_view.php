@@ -60,7 +60,7 @@
                 }
                 $.ajax({
                     type:"GET",
-                    url: "/joinAjax.php?m=board_view&board_num=" + board_num,
+                    url: "/userAjax.php?m=board_view&board_num=" + board_num,
                     dataType: 'json',
                     success : function(data){
                         $('#board_title').val(data.board_title);

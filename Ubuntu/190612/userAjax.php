@@ -48,11 +48,9 @@
         mysqli_free_result($result);
     } else if($var == "board_list"){
         $page = $_GET['page'];
-
         $sql = "select count(*) as cnt from board";
         $result = mysqli_query($con, $sql);
         $total_cnt = mysqli_fetch_object($result)->cnt;
-
         $sql_page = ($page - 1) * 10;
         $sql = "select * from board order by board_num desc LIMIT $sql_page, 10;";
         $result = mysqli_query($con, $sql);
@@ -60,6 +58,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>번호</th>
                         <th width=50%>제목</th>
                         <th>작성자</th>
                         <th>작성일</th>
@@ -72,7 +71,8 @@
             $date = date('Y-m-d', $date);
             $output .= "
                 <tr>
-                    <td><a href='board_view.php?board_num=$row->board_num' rel='external'>$row->board_title</a></td>
+                    <td>$row->board_num</td>
+                    <td class='check_pw'><a href='board_view.php?board_num=$row->board_num' rel='external'>$row->board_title</a></td>
                     <td>$row->board_user_id</td>
                     <td>$date</td>
                 </tr>
@@ -84,8 +84,7 @@
             <br>
             <div>
         ";
-
-        for ($i = 1; $i <= ($total_cnt/10) +1 ; $i++) {
+        for ($i = 1; $i <= (($total_cnt-1)/10) +1 ; $i++) {
             if($page == $i){
                 $output .= "
                     <span id='page_span'> $i <span>
@@ -105,7 +104,6 @@
     }
     else if($var == "board_view"){
        $board_num = $_GET['board_num'];
-
        $sql = "select * from board where board_num = $board_num";
        $result = mysqli_query($con, $sql);
        $row = mysqli_fetch_object($result);
@@ -115,6 +113,14 @@
        echo json_encode($output, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
        mysqli_free_result($result);
    }
+   else if($var == "board_pw_check"){
+     $board_pw = $_GET['board_pw'];
+     $board_num = $_GET['board_num'];
+     $board_pw = stripslashes($board_pw);
+     $board_num = stripslashes($board_num);
+     $board_pw = mysqli_real_escape_string($con, $board_pw);
+     $board_num = mysqli_real_escape_string($con, $board_num);
+     echo "$board_num // $board_pw";
+   }
     mysqli_close($con);
 ?>
-
