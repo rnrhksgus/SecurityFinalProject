@@ -122,6 +122,8 @@ insert into sequence values ('session', 2);
 create table session(
 	session_num int primary key,
 	session_user_id varchar(50),
+	session_ip_addr varchar(20),
+	session_mac_addr varchar(20),
 	foreign key (session_user_id) references user (user_id) on delete cascade on update cascade
 ) ENGINE = InnoDB;
 
@@ -138,11 +140,16 @@ create table server(
 ) ENGINE = InnoDB;
 
 create table block(
-	ip_addr varchar(20) primary key,
-	mac_addr varchar(20)
+	ip_addr varchar(20) unique Key,
+	mac_addr varchar(20) unique Key
 )ENGINE = InnoDB;
 
 insert into block values ('0.0.0.0', '00:00:00:00:00:00');
+insert into block (ip_addr, mac_addr) values ('0.0.0.0', '00:00:00:00:00:00');
+insert into block (ip_addr) values ('0.0.0.1');
+insert into block (ip_addr) values ('192.168.40.13');
+insert into block (mac_addr) values ('00:00:00:00:00:01');
+
 
 select * from user;
 

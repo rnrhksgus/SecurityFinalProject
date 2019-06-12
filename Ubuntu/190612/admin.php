@@ -120,24 +120,17 @@
                 width: 1080px;
                 height: 400px;
                 display: grid;
-                grid-template-columns: 712px 1fr;
+                grid-template-columns: 1fr;
             }
 
             div#server_left {
                 margin: 0;
                 padding: 0;
-                width: 700px;
                 background: white;
                 border: 1px solid #d1d8e4;
                 display: block;
                 grid-template-rows: 400px;
                 overflow-y:scroll;
-            }
-
-            div#server_right {
-                padding: 0;
-                background: white;
-                border: 1px solid #d1d8e4;
             }
 
             div#bottom {
@@ -167,6 +160,10 @@
         </style>
         <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 <?php
@@ -235,7 +232,6 @@
                         $('#board_date').text('날짜');
                     }
                 });
-
             });
             function get_board_list(event) {
                 $.ajax({
@@ -291,6 +287,62 @@
                     }
                 });
             }
+            $(function() {
+                $.contextMenu({
+                    selector: '.context-menu-one',
+                    callback: function(key, options) {
+                        var tr = $(this);
+                        var td = tr.children();
+                        var ip_addr = td.eq(0).text();
+                        var mac_addr = td.eq(1).text();
+                        $.ajax({
+                            type:"GET",
+                            url: "/adminAjax.php?m=admin_menu_block&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
+                            success : function(data){
+                                alert(data);
+                                get_server_list();
+                            }
+                        });
+                    },
+                    items: {
+                        "ip_block": {name: "IP 차단", icon: ""},
+                        "mac_block": {name: "MAC 차단", icon: ""},
+                        "sep1": "---------",
+                        "quit": {name: "종료", icon: ""}
+                    }
+                });
+                $('.context-menu-one').on('click', function(e){
+                    console.log('clicked', this);
+                });
+            });
+            $(function() {
+                $.contextMenu({
+                    selector: '.context-menu-two',
+                    callback: function(key, options) {
+                        var tr = $(this);
+                        var td = tr.children();
+                        var ip_addr = td.eq(0).text();
+                        var mac_addr = td.eq(1).text();
+                        $.ajax({
+                            type:"GET",
+                            url: "/adminAjax.php?m=admin_menu_unblock&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
+                            success : function(data){
+                                alert(data);
+                                get_block_list();
+                            }
+                        });
+                    },
+                    items: {
+                        "ip_unblock": {name: "IP 차단 해제", icon: ""},
+                        "mac_unblock": {name: "MAC 차단 해제", icon: ""},
+                        "sep1": "---------",
+                        "quit": {name: "종료", icon: ""}
+                    }
+                });
+                $('.context-menu-two').on('click', function(e){
+                    console.log('clicked', this);
+                });
+            });
         </script>
     </head>
     <body>
@@ -338,9 +390,6 @@
             <div id="server_left">
                 <h3 style='text-align:center'>로그</h3>
                 <div id="admin_server_list_result"></div>
-            </div>
-            <div id="server_right">
-                <h3 style='text-align:center' id='board_title'>통계</h3>
             </div>
         </div>
 

@@ -55,26 +55,26 @@
        $result = mysqli_query($con, $sql);
        mysqli_free_result($result);
    } else if ($var == "admin_server_list"){
-       $sql = "select * from server";
+       $sql = "select * from server where SCRIPT_NAME != REQUEST_URI";
        $result = mysqli_query($con, $sql);
        $output = "
            <table id='server_table'>
                <thead>
                    <tr>
-                       <th style='width: 15%'>IP</th>
-                       <th style='width: 20%'>MAC</th>
+                       <th style='width: 10%'>IP</th>
+                       <th style='width: 15%'>MAC</th>
                        <th style='width: 20%'>script_name</th>
                        <th>request_uri</th>
-                       <th style='width: 20%'>date</th>
+                       <th style='width: 15%'>date</th>
                    </tr>
                </thead>
                <tbody>
        ";
        while ($row = mysqli_fetch_object($result)){
            $date = strtotime($row->TIME);
-           $date = date('Y-m-d', $date);
+           $date = date('Y-m-d H:i:s', $date);
            $output .= "
-               <tr>
+               <tr class='context-menu-one btn btn-neutral'>
                    <td>$row->REMOTE_ADDR</td>
                    <td>$row->MAC_ADDR</td>
                    <td>$row->SCRIPT_NAME</td>
@@ -103,7 +103,7 @@
        ";
        while ($row = mysqli_fetch_object($result)){
            $output .= "
-               <tr>
+               <tr class='context-menu-one btn btn-neutral'>
                    <td>$row->user_id</td>
                    <td>$row->user_name</td>
                </tr>
@@ -129,7 +129,7 @@
        ";
        while ($row = mysqli_fetch_object($result)){
            $output .= "
-               <tr>
+               <tr class='context-menu-one btn btn-neutral'>
                    <td>$row->user_id</td>
                    <td>$row->user_name</td>
                </tr>
@@ -149,17 +149,15 @@
                    <tr>
                        <th style='width: 40%'>IP</th>
                        <th>MAC</th>
-                       <th style='width: 60px'></th>
                    </tr>
                </thead>
                <tbody>
        ";
        while ($row = mysqli_fetch_object($result)){
            $output .= "
-               <tr>
+               <tr class='context-menu-two btn btn-neutral'>
                    <td>$row->ip_addr</td>
                    <td>$row->mac_addr</td>
-                   <td><button type='button' class='btn_block'>해제</button></td>
                </tr>
            ";
        }
@@ -172,6 +170,33 @@
        $output = "last login : ";
        $output .= "2019-06-12 / 14:06:31";
        echo "$output";
+   } else if ($var == "admin_menu_block"){
+       $ip_addr = $_GET['ip_addr'];
+       $ip_addr = stripslashes($ip_addr);
+       $ip_addr = mysqli_real_escape_string($con, $ip_addr);
+       $mac_addr = $_GET['mac_addr'];
+       $mac_addr = stripslashes($mac_addr);
+       $mac_addr = mysqli_real_escape_string($con, $mac_addr);
+
+       echo "차단 완료";
+   } else if ($var == "admin_menu_unblock"){
+       $ip_addr = $_GET['ip_addr'];
+       $ip_addr = stripslashes($ip_addr);
+       $ip_addr = mysqli_real_escape_string($con, $ip_addr);
+       $mac_addr = $_GET['mac_addr'];
+       $mac_addr = stripslashes($mac_addr);
+       $mac_addr = mysqli_real_escape_string($con, $mac_addr);
+       if($ip_addr != ''){
+           $sql = "delete from block where ip_addr = '$ip_addr'";
+           exec("sudo iptables -D INPUT -s ".$ip_addr." -j DROP");
+           $result = mysqli_query($con, $sql);
+       }
+       if($mac_addr != ''){
+           $sql = "delete from block where mac_addr = '$mac_addr'";
+           exec("sudo iptables -D INPUT -m mac --mac-source ".$mac_addr." -j DROP");
+           $result = mysqli_query($con, $sql);
+       }
+       echo "차단 해제";
    }
    mysqli_free_result($result);
 ?>
