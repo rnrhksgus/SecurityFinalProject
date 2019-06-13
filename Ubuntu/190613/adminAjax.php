@@ -223,7 +223,7 @@
 
        $sql = "select user_type from user where user_id='$user_id'";
        $result = mysqli_query($con, $sql);
-       if (mysqli_fetch_object($result)->cnt == 0) {
+       if (mysqli_fetch_object($result)->user_type == 0) {
            echo "N";
        } else {
            echo "Y";
