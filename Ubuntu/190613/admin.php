@@ -313,18 +313,20 @@
                 $.contextMenu({
                     selector: '.context-menu-one',
                     callback: function(key, options) {
-                        var tr = $(this);
-                        var td = tr.children();
-                        var ip_addr = td.eq(0).text();
-                        var mac_addr = td.eq(1).text();
-                        $.ajax({
-                            type:"GET",
-                            url: "/adminAjax.php?m=admin_menu_block&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
-                            success : function(data){
-                                alert(data);
-                                get_block_list();
-                            }
-                        });
+                        if(key != "quit"){
+                            var tr = $(this);
+                            var td = tr.children();
+                            var ip_addr = td.eq(0).text();
+                            var mac_addr = td.eq(1).text();
+                            $.ajax({
+                                type:"GET",
+                                url: "/adminAjax.php?m=admin_menu_block&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
+                                success : function(data){
+                                    alert(data);
+                                    get_block_list();
+                                }
+                            });
+                        }
                     },
                     items: {
                         "ip_block": {name: "IP 차단", icon: ""},
@@ -341,18 +343,20 @@
                 $.contextMenu({
                     selector: '.context-menu-two',
                     callback: function(key, options) {
-                        var tr = $(this);
-                        var td = tr.children();
-                        var ip_addr = td.eq(0).text();
-                        var mac_addr = td.eq(1).text();
-                        $.ajax({
-                            type:"GET",
-                            url: "/adminAjax.php?m=admin_menu_unblock&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
-                            success : function(data){
-                                alert(data);
-                                get_block_list();
-                            }
-                        });
+                        if(key != "quit"){
+                            var tr = $(this);
+                            var td = tr.children();
+                            var ip_addr = td.eq(0).text();
+                            var mac_addr = td.eq(1).text();
+                            $.ajax({
+                                type:"GET",
+                                url: "/adminAjax.php?m=admin_menu_unblock&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
+                                success : function(data){
+                                    alert(data);
+                                    get_block_list();
+                                }
+                            });
+                        }
                     },
                     items: {
                         "ip_unblock": {name: "IP 차단 해제", icon: ""},
@@ -369,18 +373,20 @@
                 $.contextMenu({
                     selector: '.context-menu-three',
                     callback: function(key, options) {
-                        var tr = $(this);
-                        var td = tr.children();
-                        var ip_addr = td.eq(0).text();
-                        var mac_addr = td.eq(1).text();
-                        $.ajax({
-                            type:"GET",
-                            url: "/adminAjax.php?m=admin_menu_unblock&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
-                            success : function(data){
-                                alert(data);
-                                get_block_list();
-                            }
-                        });
+                        if(key != "quit"){
+                            var tr = $(this);
+                            var td = tr.children();
+                            var ip_addr = td.eq(0).text();
+                            var mac_addr = td.eq(1).text();
+                            // $.ajax({
+                            //     type:"GET",
+                            //     url: "/adminAjax.php?m=admin_menu_unblock&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
+                            //     success : function(data){
+                            //         alert(data);
+                            //         get_block_list();
+                            //     }
+                            // });
+                        }
                     },
                     items: {
                         "user_info": {name: "사용자 정보", icon: ""},
