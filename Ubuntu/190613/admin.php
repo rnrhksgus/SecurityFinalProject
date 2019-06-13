@@ -164,9 +164,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
         <script type="text/javascript">
-            var filter = "win16|win32|win64|mac";
             $(document).ready(function() {
                 <?php
+                    session_start();
+                    $user_id = $_SESSION['user_id'];
                     $con = mysqli_connect('localhost', 'user', '123456', 'user_db');
                     $php_self = $_SERVER['PHP_SELF'];
                     $remote_addr = $_SERVER['REMOTE_ADDR'];
@@ -200,10 +201,25 @@
                 get_server_list();
                 get_last_login();
             });
+            var filter = "win16|win32|win64|mac";
             if(navigator.platform){
                 if(0 > filter.indexOf(navigator.platform.toLowerCase())){
                     alert('PC로 접속해 주세요!');
                     location.href="index.php";
+                } else {
+                    var user_id= '<?= $user_id ?>';
+                    $.ajax({
+                        type:"GET",
+                        url: "/adminAjax.php?m=admin_check&user_id=" + user_id,
+                        success : function(data){
+                            var result = data.replace(/\n/g, "");
+                            if(result == "N"){
+                                location.href="index.php";
+                                return false;
+                            }
+                        }
+                    });
+
                 }
             }
             $(document).on("click", ".btn_board_view", function(){

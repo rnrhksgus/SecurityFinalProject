@@ -216,6 +216,18 @@
            $result = mysqli_query($con, $sql);
        }
        echo "차단 해제";
+   } else if ($var == "admin_check"){
+       $user_id = $_GET['user_id'];
+       $user_id = stripslashes($user_id);
+       $user_id = mysqli_real_escape_string($con, $user_id);
+
+       $sql = "select user_type from user where user_id='$user_id'";
+       $result = mysqli_query($con, $sql);
+       if (mysqli_fetch_object($result)->cnt == 0) {
+           echo "N";
+       } else {
+           echo "Y";
+       }
    }
    mysqli_free_result($result);
 ?>
