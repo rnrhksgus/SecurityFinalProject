@@ -101,54 +101,52 @@
             ";
         echo "$output";
         mysqli_free_result($result);
+    } else if($var == "board_view"){
+        $board_num = $_GET['board_num'];
+        $sql = "select * from board where board_num = $board_num";
+        $result = mysqli_query($con, $sql);
+        $row = mysqli_fetch_object($result);
+        $output['board_num'] = $row->board_num;
+        $output['board_title'] = $row->board_title;
+        $output['board_user_id'] = $row->board_user_id;
+        $output["board_content"] = $row->board_content;
+        echo json_encode($output, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        mysqli_free_result($result);
+    } else if($var == "board_pw_check"){
+        $board_pw = $_GET['board_pw'];
+        $board_num = $_GET['board_num'];
+        $board_pw = stripslashes($board_pw);
+        $board_num = stripslashes($board_num);
+        $board_pw = mysqli_real_escape_string($con, $board_pw);
+        $board_pw = md5($board_pw);
+        $board_num = mysqli_real_escape_string($con, $board_num);
+        $sql = "select count(*) as cnt from board where board_pw='$board_pw' and board_num='$board_num'";
+        $result = mysqli_query($con, $sql);
+        if (mysqli_fetch_object($result)->cnt == 0) {
+            echo "N";
+        } else {
+            echo "Y";
+        }
+        mysqli_free_result($result);
+    } else if($var =="board_delete"){
+        $board_num = $_GET['board_num'];
+        $board_num = stripslashes($board_num);
+        $board_num = mysqli_real_escape_string($con, $board_num);
+        $board_pw = $_GET['board_pw'];
+        $board_pw = stripslashes($board_pw);
+        $board_pw = mysqli_real_escape_string($con, $board_pw);
+        $board_pw = md5($board_pw);
+
+        $sql = "select count(*) as cnt from board where board_pw='$board_pw' and board_num='$board_num'";
+        $result = mysqli_query($con, $sql);
+        if (mysqli_fetch_object($result)->cnt == 0) {
+            echo "N";
+        } else {
+            $sql = "delete from board where board_num='$board_num'";
+            $result = mysqli_query($con, $sql);
+            echo "Y";
+        }
+        mysqli_free_result($result);
     }
-    else if($var == "board_view"){
-       $board_num = $_GET['board_num'];
-       $sql = "select * from board where board_num = $board_num";
-       $result = mysqli_query($con, $sql);
-       $row = mysqli_fetch_object($result);
-       $output['board_num'] = $row->board_num;
-       $output['board_title'] = $row->board_title;
-       $output['board_user_id'] = $row->board_user_id;
-       $output["board_content"] = $row->board_content;
-       echo json_encode($output, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
-       mysqli_free_result($result);
-   }
-   else if($var == "board_pw_check"){
-     $board_pw = $_GET['board_pw'];
-     $board_num = $_GET['board_num'];
-     $board_pw = stripslashes($board_pw);
-     $board_num = stripslashes($board_num);
-     $board_pw = mysqli_real_escape_string($con, $board_pw);
-     $board_pw = md5($board_pw);
-     $board_num = mysqli_real_escape_string($con, $board_num);
-     $sql = "select count(*) as cnt from board where board_pw='$board_pw' and board_num='$board_num'";
-     $result = mysqli_query($con, $sql);
-     if (mysqli_fetch_object($result)->cnt == 0) {
-         echo "N";
-     } else {
-         echo "Y";
-     }
-     mysqli_free_result($result);
-   }
-   else if($var =="board_delete"){
-     $board_pw = $_GET['board_pw'];
-     $board_num = $_GET['board_num'];
-     $board_pw = stripslashes($board_pw);
-     $board_num = $_GET['board_num'];
-     $board_pw = mysqli_real_escape_string($con, $board_pw);
-     $board_pw = md5($board_pw);
-     $board_num = mysqli_real_escape_string($con, $board_num);
-     $sql = "select count(*) as cnt from board where board_pw='$board_pw' and board_num='$board_num'";
-     $result = mysqli_query($con, $sql);
-     if (mysqli_fetch_object($result)->cnt == 0) {
-         echo "N";
-     } else {
-       $sql = "delete from board where board_num='$board_num'";
-       $result = mysqli_query($con, $sql);
-       echo "Y";
-     }
-     mysqli_free_result($result);
-   }
     mysqli_close($con);
 ?>

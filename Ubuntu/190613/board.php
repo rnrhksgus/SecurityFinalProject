@@ -81,11 +81,7 @@
                 }
                 $.ajax({
                     type:"GET",
-<<<<<<< HEAD
                     url: "/userAjax.php?m=board_list&page=" + page,
-=======
-                    url: "/joinAjax.php?m=board_list&page=" + page,
->>>>>>> 6e261082e07d99abfc14a2b96620ebf54a0543e8
                     success : function(data){
                         $("#result").html(data);
                     }
@@ -97,7 +93,6 @@
                     results = regex.exec(location.search);
                 return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
             }
-<<<<<<< HEAD
             $(document).on("click", ".check_pw", function(){
                 var tr = $(this).parent().parent();
                 var td = tr.children();
@@ -117,38 +112,6 @@
                 });
                 return false;
             });
-=======
-
-            $(document).on("click", ".check_pw", function(){
-
-              var tr = $(this).parent().parent();
-              var td = tr.children();
-              var num = td.eq(0).text();
-              // alert(num);
-              // return false;
-              var name_value = prompt("PASSWORD 를 입력하세요", "");
-              $.ajax({
-                    type:"GET",
-                    url: "/joinAjax.php?m=board_pw_check&board_num="+num+"&board_pw="+name_value,
-                    success : function(data){
-
-                      if(data=='Y')
-                      {
-
-                        location.href="board_view.php?board_num="+num;
-                      }else if(data=="N")
-                      {
-                        alert("비밀번호를 확인해주세요.!")
-                      }
-
-                    }
-                });
-
-                  return false;
-
-            });
-
->>>>>>> 6e261082e07d99abfc14a2b96620ebf54a0543e8
         </script>
     </head>
     <body>

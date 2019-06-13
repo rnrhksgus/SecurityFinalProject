@@ -164,6 +164,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
         <script type="text/javascript">
+            var filter = "win16|win32|win64|mac";
             $(document).ready(function() {
                 <?php
                     $con = mysqli_connect('localhost', 'user', '123456', 'user_db');
@@ -199,6 +200,12 @@
                 get_server_list();
                 get_last_login();
             });
+            if(navigator.platform){
+                if(0 > filter.indexOf(navigator.platform.toLowerCase())){
+                    alert('PC로 접속해 주세요!');
+                    location.href="index.php";
+                }
+            }
             $(document).on("click", ".btn_board_view", function(){
                 var checkBtn = $(this);
                 var tr = checkBtn.parent().parent();
@@ -376,7 +383,7 @@
     <body>
         <div id="top">
             <div id="top_icon">
-                <a href="admin.php"><img src="image/home_icon.png" style="height: 100px;"></a>
+                <a href="index.php"><img src="image/home_icon.png" style="height: 100px;"></a>
             </div>
             <h1 id="top_h1">Smart Car Admin</h1>
         </div>

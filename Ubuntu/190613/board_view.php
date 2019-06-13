@@ -59,11 +59,7 @@
                 }
                 $.ajax({
                     type:"GET",
-<<<<<<< HEAD
                     url: "/userAjax.php?m=board_view&board_num=" + board_num,
-=======
-                    url: "/joinAjax.php?m=board_view&board_num=" + board_num,
->>>>>>> 6e261082e07d99abfc14a2b96620ebf54a0543e8
                     dataType: 'json',
                     success : function(data){
                         $('#board_num').val(data.board_num);
@@ -79,7 +75,6 @@
                     results = regex.exec(location.search);
                 return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
             }
-<<<<<<< HEAD
             $(document).on("click", ".btn_delete", function(){
               var board_num = $("#board_num").val();
               var name_value = prompt("PASSWORD 를 입력하세요", "");
@@ -97,46 +92,6 @@
                   }
               });
           });
-=======
-
-            $(document).on("click", ".btn_delete", function(){
-
-              var board_num = $("#board_num").val();
-
-              // alert(num);
-              // return false;
-              var name_value = prompt("PASSWORD 를 입력하세요", "");
-              $.ajax({
-                    type:"GET",
-                    url: "/joinAjax.php?m=board_delete&board_num="+board_num+"&board_pw="+name_value,
-                    success : function(data){
-                      if(data=='Y')
-                      {
-                        location.href="board.php"
-                      }
-                      else{
-                        alert("비밀번호를 확인해주세요!!")
-                      }
-
-                    }
-              //         if(data=='Y')
-              //         {
-              //
-              //           location.href="board_view.php?board_num="+num;
-              //         }else if(data=="N")
-              //         {
-              //           alert("비밀번호를 확인해주세요.!")
-              //         }
-              //
-              //       }
-              //   });
-
-                  // return false;
-
-            });
-          });
-
->>>>>>> 6e261082e07d99abfc14a2b96620ebf54a0543e8
         </script>
     </head>
     <body>
