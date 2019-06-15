@@ -1,4 +1,4 @@
-mysql -u root -p123456
+﻿mysql -u root -p123456
 
 create database user_db;
 
@@ -36,7 +36,10 @@ create table user(
 	user_name varchar(50) not null,
 	user_email varchar(100) not null,
 	user_login_fail int default 0,
-	user_type int default 0
+	user_type int default 0,
+	user_date datetime,
+	user_ip_addr varchar(20) unique Key,
+	user_mac varchar(20) unique Key
 )ENGINE = InnoDB;
 
 
