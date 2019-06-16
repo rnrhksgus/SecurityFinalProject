@@ -95,17 +95,21 @@
            <table id='user_table'>
                <thead>
                    <tr>
-                       <th>user_id</th>
-                       <th>user_name</th>
+                       <th>아이디</th>
+                       <th>이름</th>
+                       <th>IP</th>
+                       <th class='table_hidden'>MAC</th>
                    </tr>
                </thead>
                <tbody>
        ";
        while ($row = mysqli_fetch_object($result)){
            $output .= "
-               <tr class='context-menu-one btn btn-neutral'>
+               <tr class='context-menu-three btn btn-neutral'>
                    <td>$row->user_id</td>
                    <td>$row->user_name</td>
+                   <td>$row->user_ip_addr</td>
+                   <td class='table_hidden'>$row->user_mac_addr</td>
                </tr>
            ";
        }
@@ -124,6 +128,7 @@
                        <th style='width: 15%'>아이디</th>
                        <th style='width: 20%'>이름</th>
                        <th style='width: 20%'>IP</th>
+                       <th class='table_hidden'></th>
                    </tr>
                </thead>
                <tbody>
@@ -134,6 +139,7 @@
                    <td>$row->user_id</td>
                    <td>$row->user_name</td>
                    <td>$row->session_ip_addr</td>
+                   <td class='table_hidden'>$row->session_mac_addr</td>
                </tr>
            ";
        }
@@ -231,4 +237,3 @@
    }
    mysqli_free_result($result);
 ?>
-

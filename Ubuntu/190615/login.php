@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html>
+<?php
+    session_start();
+    if(isset($_SESSION['user_id'])) {
+        echo "<meta http-equiv='refresh' content='0;url=index.php'>";
+        exit;
+    }
+?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +15,33 @@
         <script src="http://code.jquery.com/mobile/1.1.2/jquery.mobile-1.1.2.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
+                <?php
+                    $con = mysqli_connect('localhost', 'user', '123456', 'user_db');
+                    $php_self = $_SERVER['PHP_SELF'];
+                    $remote_addr = $_SERVER['REMOTE_ADDR'];
+                    exec("arp -H ether -n -a ".$remote_addr."",$values);
+                    $parts = explode(' ',$values[0]);
+                    $mac_addr = $parts[3];
+                    $script_name = $_SERVER['SCRIPT_NAME'];
+                    $request_uri = $_SERVER['REQUEST_URI'];
+                    $php_self = stripslashes($php_self);
+                    $remote_addr = stripslashes($remote_addr);
+                    $mac_addr = stripslashes($mac_addr);
+                    $remote_port = stripslashes($remote_port);
+                    $script_name = stripslashes($script_name);
+                    $request_uri = stripslashes($request_uri);
+                    $php_self = mysqli_real_escape_string($con, $php_self);
+                    $remote_addr = mysqli_real_escape_string($con, $remote_addr);
+                    $mac_addr = mysqli_real_escape_string($con, $mac_addr);
+                    $remote_port = mysqli_real_escape_string($con, $remote_port);
+                    $script_name = mysqli_real_escape_string($con, $script_name);
+                    $request_uri = mysqli_real_escape_string($con, $request_uri);
+                    $sql = "insert into server values ('$php_self', '$remote_addr', '$mac_addr', '$remote_port', '$script_name','$request_uri', now())";
+                    $result = mysqli_query($con, $sql);
+                    mysqli_free_result($result);
+                    mysqli_close($con);
+                ?>
+
                 $("#btn_login").click(function(){
                     var id = $("#user_id").val();
                     var pw = $("#user_pw").val();
@@ -28,7 +62,7 @@
                             var result = data.replace(/\n/g, "");
                             if(result == "Y"){
                                 alert("로그인 성공");
-                                location.href="testindex.php";
+                                location.href="index.php";
                             } else if(result == "N3"){
                                 alert("현재 접속중입니다.");
                                 location.href="login.php";
@@ -63,9 +97,8 @@
                 <p>PW : <input type="password" id="user_pw" name="user_pw" value=""></p>
                 <button type="button" name="button" id="btn_login">로그인</button>
             </form>
-            <button onclick="location.href='testsignup.php'">회원가입</button>
+            <button onclick="location.href='signup.php'">회원가입</button>
             <button onclick="location.href='board.php'">문의하기</button>
         </div>
     </body>
 </html>
-

@@ -32,7 +32,9 @@
                     $sql = "select sequence_value from sequence where sequence_name = 'session'";
                     $result = mysqli_query($con, $sql);
                     $session_num = (int)mysqli_fetch_object($result)->sequence_value;
-                    $sql = "insert into session (session_num, session_user_id, session_ip_addr, session_mac_addr) values ($session_num, '$user_id', '$remote_addr', '$mac_addr');";
+                    $sql = "insert into session (session_num, session_user_id, session_ip_addr, session_mac_addr) values ($session_num, '$user_id', '$remote_addr', '$mac_addr')";
+                    mysqli_query($con, $sql);
+                    $sql = "update user set user_ip_addr = '$remote_addr', user_mac_addr='$mac_addr' where user_id='$user_id'";
                     mysqli_query($con, $sql);
                     $sql = "update sequence set sequence_value = sequence_value + 1 where sequence_name = 'session'";
                     $result = mysqli_query($con, $sql);
@@ -125,4 +127,3 @@
     echo "$output";
     mysqli_close($con);
 ?>
-

@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html>
+<?php
+    session_start();
+    if(!isset($_SESSION['user_id'])) {
+        echo "<meta http-equiv='refresh' content='0;url=login.php'>";
+        exit;
+    }
+    $user_type = $_SESSION['user_type'];
+    $user_id = $_SESSION['user_id'];
+    $user_name = $_SESSION['user_name'];
+?>
     <head>
         <title>Smart Car Contorl</title>
         <meta charset="utf-8">
@@ -93,6 +103,15 @@
                         noUpScale('5');
                     }, 600);
                 });
+                var user_type= '<?= $user_type ?>';
+                if(user_type == '1'){
+                    $('#user_type').css("display", "inline-block");
+                } else {
+                    $('#user_type').css("display", "none");
+                }
+                var user_id= '<?= $user_id ?>';
+                var user_name= '<?= $user_name ?>';
+                $('#hello').text('Hello. ' + user_id + '(' + user_name + ')');
             });
         </script>
     </head>
@@ -101,7 +120,9 @@
             <h1 style="text-align:center;">Smart Car Control</h1>
         </div>
         <div data-role="content">
-            <a href='logout.php'rel='external'>logout</a>
+            <span id='hello'></span>
+            <a id='logout' href='logout.php'rel='external'>logout</a>
+            <a id='user_type' href='admin.php'rel='external'>admin</a>
             <div style='display:inline-block; width:100%; height:auto; text-align:center;'>
                 <img style='width:100%; height:auto;'src='http://192.168.140.64:8080/stream/video.mjpeg'>
             </div>
@@ -212,4 +233,3 @@
         }
     </script>
 </html>
-

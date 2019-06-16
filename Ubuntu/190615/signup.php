@@ -93,14 +93,14 @@
                                 var result = data.replace(/\n/g, "");
                                 if(result == "Y"){
                                     alert("회원가입 성공");
-                                    location.href="testlogin.php";
+                                    location.href="login.php";
                                 } else if(result == "N"){
                                     alert("회원가입 실패");
-                                    location.href="testlogin.php";
+                                    location.href="login.php";
                                     return false;
                                 } else {
                                     alert("오류");
-                                    location.href="testlogin.php";
+                                    location.href="login.php";
                                     return false;
                                 }
                             }
@@ -377,4 +377,3 @@
         </div>
     </body>
 </html>
-

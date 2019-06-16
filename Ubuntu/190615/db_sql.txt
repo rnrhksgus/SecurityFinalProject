@@ -39,7 +39,7 @@ create table user(
 	user_type int default 0,
 	user_date datetime,
 	user_ip_addr varchar(20) unique Key,
-	user_mac varchar(20) unique Key
+	user_mac_addr varchar(20) unique Key
 )ENGINE = InnoDB;
 
 

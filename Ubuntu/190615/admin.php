@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html>
+<?php
+    session_start();
+    $user_id = $_SESSION['user_id'];
+    $user_type = $_SESSION['user_type'];
+
+    if($user_type == '0'){
+        echo "<meta http-equiv='refresh' content='0;url=index.php'>";
+        exit;
+    }
+?>
     <head>
         <meta charset="utf-8">
         <title>Smart Car Admin</title>
@@ -155,6 +165,9 @@
             div::-webkit-scrollbar {
                 display: none;
             }
+            .table_hidden {
+                display: none;
+            }
 
         </style>
         <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -164,17 +177,35 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
         <script type="text/javascript">
+        var filter = "win16|win32|win64|mac";
+            if(navigator.platform){
+                if(0 > filter.indexOf(navigator.platform.toLowerCase())){
+                    alert('PC로 접속해 주세요!');
+                    location.href="index.php";
+                } else {
+                    var user_id= '<?= $user_id ?>';
+                    $.ajax({
+                        type:"GET",
+                        url: "/adminAjax.php?m=admin_check&user_id=" + user_id,
+                        success : function(data){
+                            var result = data.replace(/\n/g, "");
+                            if(result == "N"){
+                                location.href="index.php";
+                                return false;
+                            }
+                        }
+                    });
+
+                }
+            }
             $(document).ready(function() {
                 <?php
-                    session_start();
-                    $user_id = $_SESSION['user_id'];
                     $con = mysqli_connect('localhost', 'user', '123456', 'user_db');
                     $php_self = $_SERVER['PHP_SELF'];
                     $remote_addr = $_SERVER['REMOTE_ADDR'];
                     exec("arp -H ether -n -a ".$remote_addr."",$values);
                     $parts = explode(' ',$values[0]);
                     $mac_addr = $parts[3];
-                    $remote_port = $_SERVER['REMOTE_PORT'];
                     $script_name = $_SERVER['SCRIPT_NAME'];
                     $request_uri = $_SERVER['REQUEST_URI'];
                     $php_self = stripslashes($php_self);
@@ -201,27 +232,6 @@
                 get_server_list();
                 get_last_login();
             });
-            var filter = "win16|win32|win64|mac";
-            if(navigator.platform){
-                if(0 > filter.indexOf(navigator.platform.toLowerCase())){
-                    alert('PC로 접속해 주세요!');
-                    location.href="index.php";
-                } else {
-                    var user_id= '<?= $user_id ?>';
-                    $.ajax({
-                        type:"GET",
-                        url: "/adminAjax.php?m=admin_check&user_id=" + user_id,
-                        success : function(data){
-                            var result = data.replace(/\n/g, "");
-                            if(result == "N"){
-                                location.href="index.php";
-                                return false;
-                            }
-                        }
-                    });
-
-                }
-            }
             $(document).on("click", ".btn_board_view", function(){
                 var checkBtn = $(this);
                 var tr = checkBtn.parent().parent();
@@ -316,8 +326,8 @@
                         if(key != "quit"){
                             var tr = $(this);
                             var td = tr.children();
-                            var ip_addr = td.eq(0).text();
-                            var mac_addr = td.eq(1).text();
+                            var ip_addr = td.eq(2).text();
+                            var mac_addr = td.eq(3).text();
                             $.ajax({
                                 type:"GET",
                                 url: "/adminAjax.php?m=admin_menu_block&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
@@ -373,19 +383,23 @@
                 $.contextMenu({
                     selector: '.context-menu-three',
                     callback: function(key, options) {
-                        if(key != "quit"){
+                        if(key == 'user_info'){
+                            alert('사용자 정보');
+                        } else if (key == 'quit'){
+                            return true;
+                        } else {
                             var tr = $(this);
                             var td = tr.children();
-                            var ip_addr = td.eq(0).text();
-                            var mac_addr = td.eq(1).text();
-                            // $.ajax({
-                            //     type:"GET",
-                            //     url: "/adminAjax.php?m=admin_menu_unblock&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
-                            //     success : function(data){
-                            //         alert(data);
-                            //         get_block_list();
-                            //     }
-                            // });
+                            var ip_addr = td.eq(2).text();
+                            var mac_addr = td.eq(3).text();
+                            $.ajax({
+                                type:"GET",
+                                url: "/adminAjax.php?m=admin_menu_unblock&ip_addr="+ip_addr+"&mac_addr="+mac_addr,
+                                success : function(data){
+                                    alert(data);
+                                    get_block_list();
+                                }
+                            });
                         }
                     },
                     items: {
@@ -455,4 +469,3 @@
         </div>
     </body>
 </html>
-
