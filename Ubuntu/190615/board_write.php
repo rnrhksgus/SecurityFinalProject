@@ -75,7 +75,6 @@
                             data: boardWriteData,
                             success : function(data){
                                 var result = data.replace(/\n/g, "");
-                                alert(result);
                                 if(result == "Y"){
                                     alert("작성 완료");
                                     location.href="board.php";
@@ -211,3 +210,4 @@
         </div>
     </body>
 </html>
+

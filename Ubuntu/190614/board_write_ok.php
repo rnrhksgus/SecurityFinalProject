@@ -2,21 +2,21 @@
     $con = mysqli_connect('localhost', 'user', '123456', 'user_db');
 
     $board_title = $_POST['board_title'];
-    $board_user_id = $_POST['board_user_id'];
-    $board_pw = $_POST['board_pw'];
-    $board_content = $_POST['board_content'];
-
     $board_title = stripslashes($board_title);
-    $board_user_id = stripslashes($board_user_id);
-    $board_pw = stripslashes($board_pw);
-    $board_content = stripslashes($board_content);
-
     $board_title = mysqli_real_escape_string($con, $board_title);
-    $board_user_id = mysqli_real_escape_string($con, $board_user_id);
-    $board_pw = mysqli_real_escape_string($con, $board_pw);
-    $board_content = mysqli_real_escape_string($con, $board_content);
 
+    $board_user_id = $_POST['board_user_id'];
+    $board_user_id = stripslashes($board_user_id);
+    $board_user_id = mysqli_real_escape_string($con, $board_user_id);
+
+    $board_pw = $_POST['board_pw'];
+    $board_pw = stripslashes($board_pw);
+    $board_pw = mysqli_real_escape_string($con, $board_pw);
     $board_pw = md5($board_pw);
+
+    $board_content = $_POST['board_content'];
+    $board_content = stripslashes($board_content);
+    $board_content = mysqli_real_escape_string($con, $board_content);
 
     $sql = "select sequence_value from sequence where sequence_name = 'board'";
     $result = mysqli_query($con, $sql);

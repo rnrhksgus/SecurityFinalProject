@@ -84,7 +84,27 @@
                 });
                 $("#btn_join").click(function(){
                     if(flag_id && flag_pw && flag_pwc && flag_name && flag_email && flag_car_ip && flag_car_name && flag_car_pin){
-                        $("#form_join").submit();
+                        var signupData = $('#form_join').serialize();
+                        $.ajax({
+                            type:"POST",
+                            url: "/postAjax.php",
+                            data: signupData,
+                            success : function(data){
+                                var result = data.replace(/\n/g, "");
+                                if(result == "Y"){
+                                    alert("회원가입 성공");
+                                    location.href="testlogin.php";
+                                } else if(result == "N"){
+                                    alert("회원가입 실패");
+                                    location.href="testlogin.php";
+                                    return false;
+                                } else {
+                                    alert("오류");
+                                    location.href="testlogin.php";
+                                    return false;
+                                }
+                            }
+                        });
                     } else {
                         if(!flag_id){
                             $("#user_id").focus();
@@ -125,7 +145,7 @@
                 }
                 $.ajax({
                     type:"GET",
-                    url: "/userAjax.php?m=checkId&user_id=" + id,
+                    url: "/getAjax.php?m=checkId&user_id=" + id,
                     success : function(data){
                         var result = data.replace(/\n/g, "")
                         if (result == "Y"){
@@ -242,7 +262,7 @@
                 } else {
                     $.ajax({
                         type:"GET",
-                        url: "/userAjax.php?m=checkCarIP&car_ip=" + car_ip,
+                        url: "/getAjax.php?m=checkCarIP&car_ip=" + car_ip,
                         success : function(data){
                             var result = data.replace(/\n/g, "")
                             if (result == "Y"){
@@ -285,7 +305,7 @@
                 if (flag_car_ip){
                     $.ajax({
                         type:"GET",
-                        url: "/userAjax.php?m=checkCarPin&car_ip=" + car_ip + "&car_pin=" + car_pin,
+                        url: "/getAjax.php?m=checkCarPin&car_ip=" + car_ip + "&car_pin=" + car_pin,
                         success : function(data){
                             var result = data.replace(/\n/g, "")
                             if (result == "Y"){
@@ -325,7 +345,7 @@
             <h1 style="text-align:center;">회원 가입 및 차량 등록</h1>
         </div>
         <div data-role="content">
-            <form id="form_join" action="signup_ok.php" method="post" data-ajax="false">
+            <form id="form_join">
                 <input type="hidden" name="typeAjax" value="user_signup">
                 <label for="id"><b>아이디</b></label>
                 <input type="text" name="user_id" id="user_id" maxlength="20" />
@@ -357,3 +377,4 @@
         </div>
     </body>
 </html>
+
