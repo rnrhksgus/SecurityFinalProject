@@ -23,6 +23,9 @@
                     $_SESSION['user_id'] = $user_id;
                     $_SESSION['user_name'] = $row->user_name;
                     $_SESSION['user_type'] = $row->user_type;
+                    $date = strtotime($row->user_date);
+                    $date = date('Y-m-d / H:i:s', $date);
+                    $_SESSION['user_date'] = $date;
                     $remote_addr = $_SERVER['REMOTE_ADDR'];
                     exec("arp -H ether -n -a ".$remote_addr."",$values);
                     $parts = explode(' ',$values[0]);
@@ -38,8 +41,6 @@
                     mysqli_query($con, $sql);
                     $sql = "update sequence set sequence_value = sequence_value + 1 where sequence_name = 'session'";
                     $result = mysqli_query($con, $sql);
-                    $sql = "update user set user_date = now() where user_id = '$user_id' and user_pw = '$user_pw'";
-                    mysqli_query($con, $sql);
                     $output = "Y";
                 } else {
                     $output = "N3";
@@ -127,4 +128,3 @@
     echo "$output";
     mysqli_close($con);
 ?>
-

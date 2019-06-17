@@ -4,6 +4,7 @@
     session_start();
     $user_id = $_SESSION['user_id'];
     $user_type = $_SESSION['user_type'];
+    $user_date = $_SESSION['user_date'];
 
     if($user_type == '0'){
         echo "<meta http-equiv='refresh' content='0;url=index.php'>";
@@ -230,7 +231,8 @@
                 get_block_list();
                 get_board_list();
                 get_server_list();
-                get_last_login();
+                var user_date = '<?= $user_date ?>';
+                $('#last_login').text('Last Login : ' + user_date);
             });
             $(document).on("click", ".btn_board_view", function(){
                 var checkBtn = $(this);
@@ -307,15 +309,6 @@
                     url: "/adminAjax.php?m=admin_block_list",
                     success : function(data){
                         $("#admin_block_list_result").html(data);
-                    }
-                });
-            }
-            function get_last_login(event) {
-                $.ajax({
-                    type:"GET",
-                    url: "/adminAjax.php?m=admin_last_login&user_id=admin",
-                    success : function(data){
-                        $("#last_login").html(data);
                     }
                 });
             }
@@ -469,4 +462,3 @@
         </div>
     </body>
 </html>
-

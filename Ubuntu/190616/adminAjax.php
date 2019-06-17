@@ -174,10 +174,6 @@
        </table>
        ";
        echo "$output";
-   } else if ($var == "admin_last_login"){
-       $output = "last login : ";
-       $output .= "2019-06-12 / 14:06:31";
-       echo "$output";
    } else if ($var == "admin_menu_block"){
        $ip_addr = $_GET['ip_addr'];
        $ip_addr = stripslashes($ip_addr);
@@ -237,4 +233,3 @@
    }
    mysqli_free_result($result);
 ?>
-
